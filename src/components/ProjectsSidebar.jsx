@@ -11,7 +11,7 @@ export default function ProjectSidebar({onStartAddProject, projects}) {
                     + Add Project
                 </Button>
             </div>
-            <ul>
+            <ul className="mt-8">
                 {projects.map((project) => (
                     <li key={project.id} className="mt-4 text-stone-300">
                         <button 
