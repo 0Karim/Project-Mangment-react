@@ -7,7 +7,8 @@ import ProjectDetails from "./components/ProjectDetails";
 function App() {
   const [projectsState, setProjectsState] = useState({
     selectedProjectId: undefined,
-    projects: []
+    projects: [],
+    tasks: [],
   });
 
   function handleStartAddProject() {
@@ -70,9 +71,41 @@ function App() {
     });    
   }
 
-  const selectedProject = projectsState.projects.find(project => project.id === projectsState.selectedProjectId);
 
-  let content = <ProjectDetails project={selectedProject} onDelete={handleDeleteProject} />;
+  function handleAddTask(taskText) {
+    setProjectsState(prevState => {
+        const newTask = {
+          id: Math.random().toString(36).substring(2, 9),
+          text: taskText,
+          projectId: prevState.selectedProjectId,
+        };
+
+        return {
+          ...prevState,
+          tasks: [...prevState.tasks, newTask],
+        };
+     });    
+  }
+
+function handleDeleteTask(taskId) {
+    setProjectsState(prevState => {
+      return {
+        ...prevState,
+        tasks: prevState.tasks.filter(task => task.id !== taskId),
+      };
+    });
+  }
+
+  const selectedProject = projectsState.projects.find(project => project.id === projectsState.selectedProjectId);
+  const projectTasks = projectsState.tasks.filter(task => task.projectId === projectsState.selectedProjectId);
+
+  let content = <ProjectDetails 
+                  project={selectedProject} 
+                  onDelete={handleDeleteProject} 
+                  onAddTask={handleAddTask} 
+                  onDeleteTask={handleDeleteTask}
+                  tasks={projectTasks}
+                />;
 
   if (projectsState.selectedProjectId === null) {
     content = <NewProject onAdd={handleAddProject} onCancel={handleCancelProject} />;
@@ -82,13 +115,6 @@ function App() {
       <NoProjectSelected onStartAddProject={handleStartAddProject} />
     );
   } 
-  // else{
-  //   <ProjectDetails 
-  //     project={projectsState.projects.find(
-  //       (project) => project.id === projectsState.selectedProjectId
-  //     )} 
-  //   />;
-  // }
 
   return (
     <main className="h-screen my-8 flex gap-8">
