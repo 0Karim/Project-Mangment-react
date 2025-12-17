@@ -1,4 +1,5 @@
 export default function ProjectDetails({ project, onDelete }) {
+    console.log(project);
     const formattedDate = new Date(project.dueDate).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'short',
@@ -24,6 +25,7 @@ export default function ProjectDetails({ project, onDelete }) {
                     {project.description}
                 </p>
             </header>
+            Tasks will go here
         </div>
     );
 }
